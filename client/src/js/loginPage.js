@@ -60,7 +60,7 @@ export default @observer class LoginPage extends React.Component {
                         isLoading: false
                     });
                     //跳转，更改全局用户名，登录状态
-                    AppState.user = this.state.userName;
+                    AppState.user = document.getElementById('User').value;
                     AppState.handleLogin()
                     this.props.history.push('/');
                     console.log(AppState.user)
