@@ -31,34 +31,49 @@ function FieldGroup({
 
 
 export default @observer class LoginPage extends React.Component {
-        handleLogin(e) {
-            e.preventDefault();
-
-            fetch('/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': "application/json;charset=utf-8",
-                    },
-                    body: JSON.stringify({
-                        name: document.getElementById('User').value,
-                        password: document.getElementById('password').value
-                    })
-                })
-                .then(blob => blob.json())
-                .then(code => {
-                    if (code.status == 'success') {
-                        //跳转，更改全局用户名，登录状态
-                        //跳转
-                        AppState.user = document.getElementById('User').value;
-                        AppState.handleLogin()
-                        console.log(AppState.user)
-                    } else {
-                        alert(code.status)
-                    }
-                })
+    constructor(props) {
+        super(props)
+        this.state = {
+            isLoading: false
         }
-        render() {
-                return (<form>
+    }
+    handleLogin(e) {
+        e.preventDefault();
+        this.setState({
+            isLoading: true
+        });
+
+        fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    name: document.getElementById('User').value,
+                    password: document.getElementById('password').value
+                })
+            })
+            .then(blob => blob.json())
+            .then(code => {
+                if (code.status == 'success') {
+                    this.setState({
+                        isLoading: false
+                    });
+                    //跳转，更改全局用户名，登录状态
+                    AppState.user = this.state.userName;
+                    AppState.handleLogin()
+                    this.props.history.push('/');
+                    console.log(AppState.user)
+                } else {
+                    this.setState({
+                        isLoading: false
+                    });
+                    alert(code.status)
+                }
+            })
+    }
+    render() {
+        return (<form>
              <FieldGroup
       id="User"
       type="text"
@@ -70,7 +85,7 @@ export default @observer class LoginPage extends React.Component {
       type="password"
       label="Password:"
     />
-        <Button bsStyle="primary" onClick={this.handleLogin.bind(this)}>Login</Button> < /form>)
+        <Button bsStyle="primary" disabled={this.state.isLoading} onClick={this.handleLogin.bind(this)}>Login</Button> </form>)
 
     }
 }

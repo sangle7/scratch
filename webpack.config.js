@@ -6,16 +6,17 @@ module.exports = {
     name: "browser",
     entry: "./client/src/js/main.jsx",
     output: {
-        path: path.join(__dirname, "/client/src/build"),
+        path: path.join(__dirname, "/client/build"),
         filename: '[name].js',
         chunkFilename: '[name]-[id].js',
         publicPath: "/build/",
     },
     devServer: {
         historyApiFallback: {
-            rewrites: [
-                { from: /^\/$/, to: '/index.html' },
-            ]
+            rewrites: [{
+                from: /^\/$/,
+                to: '/index.html'
+            }, ]
         },
         contentBase: 'client'
     },
