@@ -11,6 +11,7 @@ import signupPage from "./signupPage";
 import loginPage from "./loginPage";
 import ErrorPage from "./ErrorPage";
 import newNote from "./newNote";
+import noteEdit from "./noteEdit";
 
 
 class Main extends React.Component {
@@ -23,6 +24,7 @@ class Main extends React.Component {
 	<Route exact path="/login" component={loginPage}/>
 	<Route exact path="/signup" component={signupPage}/>
 	<Route exact path="/notes/new" component={newNote}/>
+	<Route path="/notes/:id" component={noteEdit}/>
 	<Route  component={ErrorPage}/>
 </Switch></div>
 </Router>)

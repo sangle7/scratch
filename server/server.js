@@ -29,10 +29,76 @@ app.use(bodyParser.urlencoded({ //此项必须在 bodyParser.json 下面,为参�
     extended: true
 }));
 
+app.use(Express.static(path.join(__dirname, '..', 'client')));
+//处理用户数据
 app.post('/login', function(req, res) {
-    res.send(JSON.stringify(success))
+    //先判断用户名是否存在
+    connection.query('select * from user where name="' + req.body.name + '"', function(err, result) {
+        if (err) {
+            console.log('[query] - :' + err);
+            return;
+        }
+        if (result[0]) {
+            //存在，进行下一步
+            checkPassword(req)
+        } else {
+            //用户名不存在，返回结果
+            res.send(JSON.stringify({
+                "status": "用户名不存在"
+            }))
+        }
+    });
+
+    function checkPassword(req) {
+        connection.query('select * from user where name="' + req.body.name + '" and password="' + req.body.password + '"', function(err, result) {
+            if (err) {
+                console.log('[query] - :' + err);
+                return;
+            }
+            if (result[0]) {
+                res.send(JSON.stringify({
+                    "status": "success"
+                }))
+            } else {
+                //密码错误，返回结果
+                res.send(JSON.stringify({
+                    "status": "密码错误"
+                }))
+
+            }
+        });
+    }
 });
-app.get('/', function(req, res) {
+app.post('/signup', function(req, res) {
+    //先判断用户名是否存在
+    connection.query('select * from user where name="' + req.body.name + '"', function(err, result) {
+        if (err) {
+            console.log('[query] - :' + err);
+            return;
+        }
+        if (result[0]) {
+            //存在，返回结果
+            res.send(JSON.stringify({
+                "status": "用户名已存在"
+            }))
+        } else {
+            //用户名不存在，进行下一步
+            connection.query('INSERT INTO user(name,password) VALUES("' + req.body.name + '","' + req.body.password + '")', function(err, result) {
+                if (err) {
+                    console.log('[query] - :' + err);
+                    return;
+                }
+                res.send(JSON.stringify({
+                    "status": "success"
+                }))
+            });
+        }
+    });
+});
+
+
+//处理note数据
+app.get('/mynote', function(req, res) {
     //执行SQL语句
     connection.query('select * from notes where name="' + req.query.user + '"', function(err, result) {
         if (err) {
@@ -46,6 +112,27 @@ app.get('/', function(req, res) {
 
 app.post('/newNote', function(req, res) {
     connection.query('INSERT INTO notes(name,content,time) VALUES("' + req.body.user + '","' + req.body.content + '","' + req.body.time + '")', function(err, result) {
+        if (err) {
+            console.log('[query] - :' + err);
+            return;
+        }
+        res.send(success)
+    });
+});
+
+app.post('/editNote', function(req, res) {
+
+    connection.query('update notes set content="' + req.body.content + '",time="' + req.body.time + '" where id=' + req.body.id, function(err, result) {
+        if (err) {
+            console.log('[query] - :' + err);
+            return;
+        }
+        res.send(success)
+    });
+});
+
+app.post('/deleteNote', function(req, res) {
+    connection.query('delete from notes where id=' + req.body.id, function(err, result) {
         if (err) {
             console.log('[query] - :' + err);
             return;

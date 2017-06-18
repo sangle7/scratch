@@ -31,21 +31,34 @@ function FieldGroup({
 
 
 export default @observer class LoginPage extends React.Component {
-    handleLogin(e) {
-        e.preventDefault();
-        fetch('http://localhost:3000', {
-                method: "POST",
-                mode: 'no-cors',
-                body: "firstName=Nikhil&favColor=blue&password=easytogues"
-            })
-            .then((res) => {
-                AppState.handleLogin()
-            }, function(e) {
-                alert("Error submitting form!");
-            });
-    }
-    render() {
-        return (<form>
+        handleLogin(e) {
+            e.preventDefault();
+
+            fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': "application/json;charset=utf-8",
+                    },
+                    body: JSON.stringify({
+                        name: document.getElementById('User').value,
+                        password: document.getElementById('password').value
+                    })
+                })
+                .then(blob => blob.json())
+                .then(code => {
+                    if (code.status == 'success') {
+                        //跳转，更改全局用户名，登录状态
+                        //跳转
+                        AppState.user = document.getElementById('User').value;
+                        AppState.handleLogin()
+                        console.log(AppState.user)
+                    } else {
+                        alert(code.status)
+                    }
+                })
+        }
+        render() {
+                return (<form>
              <FieldGroup
       id="User"
       type="text"

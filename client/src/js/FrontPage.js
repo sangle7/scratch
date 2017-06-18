@@ -23,19 +23,19 @@ export default @observer class LoggedFp extends React.Component {
                 if (request.status == 200) {
                     var data = JSON.parse(request.responseText)
                     AppState.mynotes = data
-                        // AppState.updateMynotes(data)
                 } else {
                     console.log(request.status);
                 }
             }
         }
-        request.open('get', 'http://45.76.223.155:7070/?user=' + AppState.user);
+        request.open('get', '/mynote?user=' + AppState.user);
         request.send()
     }
 
     render() {
         const mynotes = AppState.mynotes.map((elem, index) => {
-            return <ListGroupItem header={elem.content} href="#" key={index}>{elem.time}</ListGroupItem>
+            var url = '/notes/' + elem.id
+            return <Link to={url}><ListGroupItem header={elem.content}  key={index}>{elem.time}</ListGroupItem></Link>
         })
 
         return (<ListGroup>

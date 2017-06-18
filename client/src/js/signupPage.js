@@ -27,22 +27,63 @@ function FieldGroup({
     </FormGroup>
     );
 }
-
+<FormGroup
+          controlId="formBasicText"
+          validationState={this.getValidationState()}>
+          <ControlLabel>Password:</ControlLabel>
+          <FormControl
+            type="password"
+            value={this.state.password}
+            onChange={this.handleChange}
+          />
+          <FormControl.Feedback />
+          <HelpBlock>Password should contains a number.</HelpBlock>
+        </FormGroup>
 
 export default @observer class signupPage extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            password: ''
+        }
+    }
+    getValidationState() {
+        const length = this.state.password.length;
+        if (length > 10) return 'success';
+        else if (length > 5) return 'warning';
+        else if (length > 0) return 'error';
+    }
+
+    handleChange(e) {
+        this.setState({
+            password: e.target.value
+        }.bind(this));
+    }
     handleSignup(e) {
         e.preventDefault();
-        fetch('http://localhost:3000', {
-                method: "POST",
-                mode: 'no-cors',
-                body: 'user=' + this.refs.user.value + '&password=' + this.refs.pw.value
+        //进行表单验证
+        fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    name: document.getElementById('User').value,
+                    password: document.getElementById('password').value
+                })
             })
-            .then((res) => {
-                AppState.handleLogin()
-            }, function(e) {
-                alert("Error submitting form!");
-            });
-
+            .then(blob => blob.json())
+            .then(code => {
+                if (code.status == 'success') {
+                    //跳转，更改全局用户名，登录状态
+                    //跳转
+                    AppState.user = document.getElementById('User').value;
+                    AppState.handleLogin()
+                    console.log(AppState.user)
+                } else {
+                    alert(code.status)
+                }
+            })
     }
     signupFail() {
         console.log('fail...')
@@ -57,16 +98,24 @@ export default @observer class signupPage extends React.Component {
       label="User:"
     />
 
-    <FieldGroup
-      id="password"
-      type="password"
-      label="Password:"
-    />
+    <FormGroup
+          controlId="password"
+          validationState={this.getValidationState.bind(this)}>
+          <ControlLabel>Password:</ControlLabel>
+          <FormControl
+            type="password"
+            value={this.state.password}
+            onChange={this.handleChange.bind(this)}
+          />
+          <FormControl.Feedback />
+          <HelpBlock>Password should contains a number.</HelpBlock>
+        </FormGroup>
+
     <FieldGroup
       id="repassword"
       type="password"
       label="Confirm Password:"
     />
-      <Button bsStyle="primary" onClick={this.handleSignup.bind(this)}>Signup</Button> </form>)
+      <Button bsStyle="primary" disabled onClick={this.handleSignup.bind(this)}>Signup</Button> </form>)
     }
 }
