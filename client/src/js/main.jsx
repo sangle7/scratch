@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import {
 	BrowserRouter as Router,
 	Route,
-	Switch
+	Switch,Redirect
 } from 'react-router-dom';
 import Head from "./Head"
 import mainpage from "./mainpage"
@@ -13,7 +13,22 @@ import ErrorPage from "./ErrorPage";
 import newNote from "./newNote";
 import noteEdit from "./noteEdit";
 import './../css/global.css'
+import Appstate from './Appstate'
 
+
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={props => (
+    Appstate.login ? (
+      <Component {...props}/>
+    ) : (
+      <Redirect to={{
+        pathname: '/login',
+        state: { from: props.location }
+      }}/>
+    )
+  )}/>
+)
 
 class Main extends React.Component {
 
@@ -24,12 +39,13 @@ class Main extends React.Component {
 	<Route exact path='/' component={mainpage}/>
 	<Route exact path="/login" component={loginPage}/>
 	<Route exact path="/signup" component={signupPage}/>
-	<Route exact path="/notes/new" component={newNote}/>
-	<Route path="/notes/:id" component={noteEdit}/>
+	<PrivateRoute exact path="/notes/new" component={newNote}/>
+	<PrivateRoute path="/notes/:id" component={noteEdit}/>
 	<Route  component={ErrorPage}/>
 </Switch></div>
 </Router>)
     }
 }
+
 
 ReactDOM.render(<Main />,document.getElementById('root'))
