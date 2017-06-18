@@ -118,13 +118,12 @@ export default @observer class noteEdit extends React.Component {
         })
         return (<Col sm={10} md={8} smOffset={1} mdOffset={2}><form className={style.form}>
    <FormGroup controlId="note">
-      <ControlLabel>Textarea</ControlLabel>
-      <FormControl  defaultValue={thisNote[0].content} componentClass="textarea" placeholder="textarea" />
+      <FormControl  defaultValue={thisNote[0].content} componentClass="textarea" placeholder="Write something..." />
     </FormGroup>
     <FieldGroup
       id="formControlsFile"
       type="file"
-      label="File"
+      label="Attachment"
       help="Example block-level help text here."
     />
           <Button bsSize="large" block bsStyle="primary" disabled={this.state.isLoading} onClick={this.saveNote.bind(this,this.props.match.params.id)}>Save</Button>

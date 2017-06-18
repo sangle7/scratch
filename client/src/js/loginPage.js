@@ -14,6 +14,10 @@ import {
     Col
 } from "react-bootstrap"
 import style from './../css/form.scss'
+import {
+    fakeAuth
+} from './main.jsx'
+
 
 function FieldGroup({
     id,
@@ -38,6 +42,9 @@ export default @observer class LoginPage extends React.Component {
             isLoading: false
         }
     }
+    state = {
+        redirectToReferrer: false
+    }
     handleLogin(e) {
         e.preventDefault();
         this.setState({
@@ -61,6 +68,11 @@ export default @observer class LoginPage extends React.Component {
                         isLoading: false
                     });
                     //跳转，更改全局用户名，登录状态
+                    fakeAuth.authenticate(() => {
+                        this.setState({
+                            redirectToReferrer: true
+                        })
+                    })
                     AppState.user = document.getElementById('User').value;
                     AppState.handleLogin()
                     this.props.history.push('/');
@@ -74,6 +86,22 @@ export default @observer class LoginPage extends React.Component {
             })
     }
     render() {
+        const {
+            from
+        } = this.props.location.state || {
+            from: {
+                pathname: '/'
+            }
+        }
+        const {
+            redirectToReferrer
+        } = this.state
+
+        if (redirectToReferrer) {
+            return (
+                <Redirect to={from}/>
+            )
+        }
         return (<Col sm={6} md={4} smOffset={3} mdOffset={4}><form className={style.form}>
              <FieldGroup
       id="User"

@@ -8,26 +8,20 @@ import {
 import {
     AppState
 } from "./Appstate.js"
-import {
-    Navbar,
-    Nav,
-    NavItem
-} from 'react-bootstrap'
 import style from './../css/Head.scss'
 
 export default @observer class Head extends React.Component {
-    handleLogout() {
+    handleLogout = () => {
         AppState.handleLogout()
     }
     render() {
-        const page = AppState.login == true ? <Link to='/'>Logout</Link> : <div></div>
+        const page = AppState.login == true ? <Link to='/'><li className={style.list} onClick={this.handleLogout}>Logout</li></Link> : <div><Link to='/login'><li className={style.list}>Login</li></Link> <Link to = '/signup' > <li className={style.list}>Signup</li> </Link></div>
 
 
         return (<div className={style.title}>
     <ul className={style.ul}>
-    <li className={style.logo}><Link to='/'>Scratch</Link></li>
-    <Link to='/login'><li>Login</li></Link>
-    <Link to='/signup'><li>Signup</li></Link>
+    <Link to='/'><li className={style.logo}>Scratch</li></Link>
+    {page}
       </ul>
     </div>)
     }

@@ -13,36 +13,35 @@
         padding: 0 10px;
         box-sizing: border-box;
         top: 0;
-        .logo {
-            margin-right: 20px;
-            float: left;
-            font-weight: 700;
-            a {
-                line-height: 50px;
-                color: white;
-            }
-            &:hover {
-                cursor: pointer;
-            }
-        }
-        a {
-            color: white;
-        }
-        li {
-            font-weight: 100;
-            float: right;
-            background: 'transparent';
-            list-style: none;
-            line-height: 64px;
-            font-size: 20px;
-            color: white;
-            text-align: center;
-            padding-left: 10px;
-            padding-right: 10px;
-            cursor: pointer;
-            &:hover {
-                color: '#333'
-            }
-        }
+    }
+}
+
+.logo {
+    margin-right: 20px;
+    float: left;
+    font-weight: 700;
+    color: white;
+    line-height: 64px;
+    font-size: 24px;
+    text-decoration: none;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.list {
+    font-weight: 100;
+    float: right;
+    background: 'transparent';
+    list-style: none;
+    line-height: 64px;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+    &:hover {
+        background: #AFAFAF;
     }
 }

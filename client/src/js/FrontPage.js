@@ -12,7 +12,7 @@ import {
 import {
     ListGroupItem,
     ListGroup,
-    Jumbotron
+    Col
 } from 'react-bootstrap'
 
 export default @observer class LoggedFp extends React.Component {
@@ -32,21 +32,23 @@ export default @observer class LoggedFp extends React.Component {
         request.open('get', '/mynote?user=' + AppState.user);
         request.send()
     }
+    handleClick(url) {
+        this.props.history.push(url)
+    }
 
     render() {
         const mynotes = AppState.mynotes.map((elem, index) => {
             var url = '/notes/' + elem.id
-            return <Link to={url}><ListGroupItem header={elem.content}  key={index}>{elem.time}</ListGroupItem></Link>
+            var header = elem.content.length > 15 ? elem.content.slice(0, 15) + '...' : elem.content
+            return <Link to={url}><ListGroupItem  header={header}  key={index}>{elem.time}</ListGroupItem></Link>
         })
 
-        return (<div>
-              <Jumbotron>
-    <h1>Welcome back,{AppState.user}</h1>
-    <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-  </Jumbotron>
+        return (
+            <Col md={8} mdOffset={2} sm={10} smOffset={1}>
+    <h2 style={{'margin': '30px 0 0 0'}}>Welcome back, {AppState.user}</h2><hr/>
             <ListGroup>
      <Link to='/notes/new'><ListGroupItem header="New Note">Start From Here</ListGroupItem></Link>
     {mynotes}
-  </ListGroup></div>)
+  </ListGroup></Col>)
     }
 }
