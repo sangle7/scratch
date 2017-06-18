@@ -11,7 +11,8 @@ import {
 } from 'react-router-dom'
 import {
     ListGroupItem,
-    ListGroup
+    ListGroup,
+    Jumbotron
 } from 'react-bootstrap'
 
 export default @observer class LoggedFp extends React.Component {
@@ -38,9 +39,14 @@ export default @observer class LoggedFp extends React.Component {
             return <Link to={url}><ListGroupItem header={elem.content}  key={index}>{elem.time}</ListGroupItem></Link>
         })
 
-        return (<ListGroup>
+        return (<div>
+              <Jumbotron>
+    <h1>Welcome back,{AppState.user}</h1>
+    <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+  </Jumbotron>
+            <ListGroup>
      <Link to='/notes/new'><ListGroupItem header="New Note">Start From Here</ListGroupItem></Link>
     {mynotes}
-  </ListGroup>)
+  </ListGroup></div>)
     }
 }

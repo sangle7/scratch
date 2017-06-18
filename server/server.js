@@ -121,7 +121,6 @@ app.post('/newNote', function(req, res) {
 });
 
 app.post('/editNote', function(req, res) {
-
     connection.query('update notes set content="' + req.body.content + '",time="' + req.body.time + '" where id=' + req.body.id, function(err, result) {
         if (err) {
             console.log('[query] - :' + err);
