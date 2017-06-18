@@ -10,6 +10,7 @@ import {
 import {
     AppState
 } from "./Appstate.js"
+import style from './../css/form.scss'
 
 function FieldGroup({
     id,
@@ -81,17 +82,17 @@ export default class newNote extends React.Component {
         }
     }
     render() {
-        return (<form>
+        return (<Col sm={10} md={8} smOffset={1} mdOffset={2}><form className={style.form}>
    <FormGroup controlId="note">
-      <ControlLabel>Textarea</ControlLabel>
       <FormControl onChange={this.handleChange} componentClass="textarea" placeholder="Write something..." />
     </FormGroup>
     <FieldGroup
       id="formControlsFile"
       type="file"
-      label="File"
+      label="Attachment"
       help="Example block-level help text here."
     />
-          <Button bsStyle="primary" disabled={this.state.isLoading||this.state.validation} onClick={this.saveNote.bind(this)}>Create</Button></form>)
+          <Button bsSize="large" block bsStyle="primary" disabled={this.state.isLoading||this.state.validation} onClick={this.saveNote.bind(this)}>Create</Button></form>
+</Col>)
     }
 }

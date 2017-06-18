@@ -6,7 +6,7 @@ import {
     AppState
 } from "./Appstate.js"
 import {
-    Jumbotron
+    Col
 } from 'react-bootstrap'
 
 
@@ -18,11 +18,9 @@ import LoggedFp from './FrontPage'
 export default @observer class Frontpage extends React.Component {
     render() {
         const page = AppState.login == true ?
-            <LoggedFp /> :
-            <Jumbotron>
-    <h1>Scratch</h1>
-    <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-  </Jumbotron>
+            <LoggedFp /> : <Col md={6} mdOffset={3} sm={8} smOffset={2}>
+    <h1 style={{'marginTop': '100px'}}>Scratch</h1>
+    <p style={{'textAlign': 'center'}}>A simple note-taking app.</p></Col>
         return (<div>{page}</div>)
     }
 }

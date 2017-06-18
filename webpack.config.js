@@ -28,7 +28,7 @@ module.exports = {
             include: path.join(__dirname, 'client')
         }, {
             test: /\.css$/,
-            loader: 'style-loader!css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]',
+            loader: 'style-loader!css-loader',
             include: path.join(__dirname, 'client')
         }, {
             test: /\.scss$/,

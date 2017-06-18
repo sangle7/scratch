@@ -13,26 +13,22 @@ import {
     Nav,
     NavItem
 } from 'react-bootstrap'
+import style from './../css/Head.scss'
 
 export default @observer class Head extends React.Component {
     handleLogout() {
         AppState.handleLogout()
     }
     render() {
-        const page = AppState.login == true ? <Nav pullRight><NavItem onClick={this.handleLogout.bind(this)} eventKey={1}><Link to='/'>Logout</Link></NavItem></Nav> : <Nav pullRight>
-        <NavItem eventKey={1}><Link to='/signup'>Signup</Link></NavItem>
-        <NavItem eventKey={2}><Link to='/login'>Login</Link></NavItem>
-      </Nav>
-        return (<Navbar collapseOnSelect>
-    <Navbar.Header>
-      <Navbar.Brand>
-       <Link to='/'>Scratch</Link>
-      </Navbar.Brand>
-      <Navbar.Toggle />
-    </Navbar.Header>
-    <Navbar.Collapse>
-     {page}
-    </Navbar.Collapse>
-  </Navbar>)
+        const page = AppState.login == true ? <Link to='/'>Logout</Link> : <div></div>
+
+
+        return (<div className={style.title}>
+    <ul className={style.ul}>
+    <li className={style.logo}><Link to='/'>Scratch</Link></li>
+    <Link to='/login'><li>Login</li></Link>
+    <Link to='/signup'><li>Signup</li></Link>
+      </ul>
+    </div>)
     }
 }

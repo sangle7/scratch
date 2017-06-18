@@ -12,6 +12,7 @@ import loginPage from "./loginPage";
 import ErrorPage from "./ErrorPage";
 import newNote from "./newNote";
 import noteEdit from "./noteEdit";
+import './../css/global.css'
 
 
 class Main extends React.Component {

@@ -1,0 +1,48 @@
+.title {
+    height: 64px;
+    width: 100%;
+    color: white;
+    z-index: 999;
+    transition: 2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .26);
+    background-color: #777;
+    .ul {
+        height: 50px;
+        position: absolute;
+        width: 100%;
+        padding: 0 10px;
+        box-sizing: border-box;
+        top: 0;
+        .logo {
+            margin-right: 20px;
+            float: left;
+            font-weight: 700;
+            a {
+                line-height: 50px;
+                color: white;
+            }
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        a {
+            color: white;
+        }
+        li {
+            font-weight: 100;
+            float: right;
+            background: 'transparent';
+            list-style: none;
+            line-height: 64px;
+            font-size: 20px;
+            color: white;
+            text-align: center;
+            padding-left: 10px;
+            padding-right: 10px;
+            cursor: pointer;
+            &:hover {
+                color: '#333'
+            }
+        }
+    }
+}

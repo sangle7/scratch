@@ -13,6 +13,7 @@ import {
     Button,
     Col
 } from "react-bootstrap"
+import style from './../css/form.scss'
 
 function FieldGroup({
     id,
@@ -21,7 +22,7 @@ function FieldGroup({
     ...props
 }) {
     return (
-        <FormGroup controlId={id}>
+        <FormGroup  bsSize='large' controlId={id}>
         
       <ControlLabel>{label}</ControlLabel>
       <FormControl {...props} />
@@ -73,11 +74,12 @@ export default @observer class LoginPage extends React.Component {
             })
     }
     render() {
-        return (<form>
+        return (<Col sm={6} md={4} smOffset={3} mdOffset={4}><form className={style.form}>
              <FieldGroup
       id="User"
       type="text"
       label="User:"
+      placeholder='Insert UserName Here'
     />
 
     <FieldGroup
@@ -85,7 +87,8 @@ export default @observer class LoginPage extends React.Component {
       type="password"
       label="Password:"
     />
-        <Button bsStyle="primary" disabled={this.state.isLoading} onClick={this.handleLogin.bind(this)}>Login</Button> </form>)
-
+        <Button bsStyle="primary" disabled={this.state.isLoading} onClick={this.handleLogin.bind(this)}>Login</Button> 
+        <Button bsStyle="success" type="reset">Reset</Button>
+        </form></Col>)
     }
 }

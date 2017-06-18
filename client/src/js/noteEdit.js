@@ -16,7 +16,7 @@ import {
 import {
     Link
 } from 'react-router-dom'
-
+import style from './../css/form.scss'
 
 function FieldGroup({
     id,
@@ -116,7 +116,7 @@ export default @observer class noteEdit extends React.Component {
         const thisNote = AppState.mynotes.slice().filter((elem) => {
             return elem.id == this.props.match.params.id
         })
-        return (<form>
+        return (<Col sm={10} md={8} smOffset={1} mdOffset={2}><form className={style.form}>
    <FormGroup controlId="note">
       <ControlLabel>Textarea</ControlLabel>
       <FormControl  defaultValue={thisNote[0].content} componentClass="textarea" placeholder="textarea" />
@@ -127,8 +127,8 @@ export default @observer class noteEdit extends React.Component {
       label="File"
       help="Example block-level help text here."
     />
-          <Button bsStyle="primary" disabled={this.state.isLoading} onClick={this.saveNote.bind(this,this.props.match.params.id)}>Save</Button>
-          <Button bsStyle="danger" disabled={this.state.isLoading} onClick={this.deleteNote.bind(this,this.props.match.params.id)}>Delete</Button>
-          </form>)
+          <Button bsSize="large" block bsStyle="primary" disabled={this.state.isLoading} onClick={this.saveNote.bind(this,this.props.match.params.id)}>Save</Button>
+          <Button bsSize="large" block bsStyle="danger" disabled={this.state.isLoading} onClick={this.deleteNote.bind(this,this.props.match.params.id)}>Delete</Button>
+          </form></Col>)
     }
 }
