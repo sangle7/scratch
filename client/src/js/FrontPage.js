@@ -16,7 +16,7 @@ import {
 } from 'react-bootstrap'
 
 export default @observer class LoggedFp extends React.Component {
-    componentWillMount() {
+    componentDidMount() {
         //获取用户笔记列表，ajax根据用户名筛选数据库，获得数组后render
         var request = new XMLHttpRequest();
         request.onreadystatechange = function() {
