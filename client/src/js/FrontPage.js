@@ -39,7 +39,7 @@ export default @observer class LoggedFp extends React.Component {
     render() {
         const mynotes = AppState.mynotes.map((elem, index) => {
             var url = '/notes/' + elem.id
-            var header = elem.content.length > 15 ? elem.content.slice(0, 15) + '...' : elem.content
+            var header = elem.content.length > 20 ? elem.content.slice(0, 20) + '...' : elem.content
             return <Link to={url}><ListGroupItem  header={header}  key={index}>{elem.time}</ListGroupItem></Link>
         })
 

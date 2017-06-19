@@ -14,9 +14,11 @@ import {
     AppState
 } from "./Appstate.js"
 import {
-    Link
+    Link,
+    Redirect
 } from 'react-router-dom'
 import style from './../css/form.scss'
+
 
 function FieldGroup({
     id,
@@ -116,7 +118,10 @@ export default @observer class noteEdit extends React.Component {
         const thisNote = AppState.mynotes.slice().filter((elem) => {
             return elem.id == this.props.match.params.id
         })
-        return (<Col sm={10} md={8} smOffset={1} mdOffset={2}><form className={style.form}>
+        if (!thisNote[0]) {
+            return (<Redirect to={{pathname: '/'}}/>)
+        }
+        return (<Col sm={10} md={8} smOffset={1} mdOffset={2}><form className={style.form} >
    <FormGroup controlId="note">
       <FormControl  defaultValue={thisNote[0].content} componentClass="textarea" placeholder="Write something..." />
     </FormGroup>

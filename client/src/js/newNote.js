@@ -42,8 +42,16 @@ export default class newNote extends React.Component {
         this.setState({
             isLoading: true
         });
-        //上传note，发送ajax传入数据库（用户名，文字内容，时间，//附件）
-        //fetch(url,{mode:'no-cors',type:'post'})
+        var file = document.getElementById('formControlsFile').files[0];
+        var reader = new FileReader();
+        reader.onload = (e) => {
+            var rawData = reader.result;
+            this.handleUpload(file, rawData)
+        }
+        reader.readAsBinaryString(file);
+    }
+    handleUpload = (file, rawData) => {
+        //上传note，发送ajax传入数据库（用户名，文字内容，时间）
         fetch('/newNote', {
                 method: 'POST',
                 headers: {
@@ -52,7 +60,11 @@ export default class newNote extends React.Component {
                 body: JSON.stringify({
                     user: AppState.user,
                     content: document.getElementById('note').value,
-                    time: new Date().toString().slice(4, 21)
+                    time: new Date().toString().slice(4, 21),
+                    file: {
+                        name: file.name,
+                        data: rawData
+                    }
                 })
             })
             .then(blob => blob.json())

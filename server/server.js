@@ -3,6 +3,8 @@ var http = require('http');
 var Express = require('express');
 var bodyParser = require("body-parser");
 var mysql = require('mysql');
+var fs = require('fs');
+
 
 const app = new Express();
 const server = new http.Server(app);
@@ -24,7 +26,9 @@ connection.connect(function(err) {
     console.log('[connection connect]  succeed!');
 });
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+    limit: '10000kb'
+}));
 app.use(bodyParser.urlencoded({ //此项必须在 bodyParser.json 下面,为参数编码
     extended: true
 }));
@@ -111,13 +115,33 @@ app.get('/mynote', function(req, res) {
 });
 
 app.post('/newNote', function(req, res) {
-    connection.query('INSERT INTO notes(name,content,time) VALUES("' + req.body.user + '","' + req.body.content + '","' + req.body.time + '")', function(err, result) {
-        if (err) {
-            console.log('[query] - :' + err);
-            return;
-        }
-        res.send(success)
-    });
+    /*//存在文件
+    if (req.body.file.name) {
+        var buf = new Buffer(req.body.file.data, 'binary');
+        connection.query('INSERT INTO notes(name,content,time) VALUES("' + req.body.user + '","' + req.body.content + '","' + req.body.time + '")', function(err, result) {
+            if (err) {
+                console.log('[query] - :' + err);
+                return;
+            }
+            connection.query('SELECT LAST_INSERT_ID()', function(err, result) {
+                console.log(JSON.stringify(result))
+                    var url = req.body.user + '' + req.body. + req.body.file.name
+                    fs.writeFile(req.body.file.name, buf, (err) => {
+                        if (err) throw err;
+                        res.send(success)
+                    });
+            })
+        });
+    } else {
+        //没有文件
+        connection.query('INSERT INTO notes(name,content,time) VALUES("' + req.body.user + '","' + req.body.content + '","' + req.body.time + '")', function(err, result) {
+            if (err) {
+                console.log('[query] - :' + err);
+                return;
+            }
+            res.send(success)
+        });
+    }*/
 });
 
 app.post('/editNote', function(req, res) {
@@ -140,6 +164,12 @@ app.post('/deleteNote', function(req, res) {
     });
 });
 
+
+app.use(function(req, res, next) {
+    if (res.status(404)) {
+        res.sendFile(path.join(__dirname, '..', 'client', 'index.html'))
+    }
+});
 
 
 // //关闭connection

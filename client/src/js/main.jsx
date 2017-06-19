@@ -21,7 +21,7 @@ import {
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
-    AppState.login ? (
+    AppState.login== true ? (
       <Component {...props}/>
     ) : (
       <Redirect to={{
