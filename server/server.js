@@ -4,7 +4,22 @@ var Express = require('express');
 var bodyParser = require("body-parser");
 var mysql = require('mysql');
 var fs = require('fs');
+var multer = require('multer')
 
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, path.join(__dirname, '..', 'public'))
+    },
+    filename: function(req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+})
+var upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 10485760
+    }
+})
 
 const app = new Express();
 const server = new http.Server(app);
@@ -34,6 +49,8 @@ app.use(bodyParser.urlencoded({ //此项必须在 bodyParser.json 下面,为参�
 }));
 
 app.use(Express.static(path.join(__dirname, '..', 'client')));
+app.use(Express.static(path.join(__dirname, '..')));
+app.use(Express.static(path.join(__dirname, '..', 'public')));
 //处理用户数据
 app.post('/login', function(req, res) {
     //先判断用户名是否存在
@@ -114,38 +131,21 @@ app.get('/mynote', function(req, res) {
     });
 });
 
-app.post('/newNote', function(req, res) {
-    /*//存在文件
-    if (req.body.file.name) {
-        var buf = new Buffer(req.body.file.data, 'binary');
-        connection.query('INSERT INTO notes(name,content,time) VALUES("' + req.body.user + '","' + req.body.content + '","' + req.body.time + '")', function(err, result) {
-            if (err) {
-                console.log('[query] - :' + err);
-                return;
-            }
-            connection.query('SELECT LAST_INSERT_ID()', function(err, result) {
-                console.log(JSON.stringify(result))
-                    var url = req.body.user + '' + req.body. + req.body.file.name
-                    fs.writeFile(req.body.file.name, buf, (err) => {
-                        if (err) throw err;
-                        res.send(success)
-                    });
-            })
-        });
-    } else {
-        //没有文件
-        connection.query('INSERT INTO notes(name,content,time) VALUES("' + req.body.user + '","' + req.body.content + '","' + req.body.time + '")', function(err, result) {
-            if (err) {
-                console.log('[query] - :' + err);
-                return;
-            }
-            res.send(success)
-        });
-    }*/
+app.post('/newNote', upload.single('file'), function(req, res) {
+    var _file = req.file.filename
+    connection.query('INSERT INTO notes(name,content,time,file) VALUES("' + req.body.user + '","' + req.body.content + '","' + req.body.time + '","' + _file + '")', function(err, result) {
+        if (err) {
+            console.log('[query] - :' + err);
+            return;
+        }
+        res.send(success)
+    });
 });
 
-app.post('/editNote', function(req, res) {
-    connection.query('update notes set content="' + req.body.content + '",time="' + req.body.time + '" where id=' + req.body.id, function(err, result) {
+app.post('/editNote', upload.single('file'), function(req, res) {
+    var _file = req.file.filename
+    console.log(_file)
+    connection.query('update notes set content="' + req.body.content + '",file="' + _file + '",time="' + req.body.time + '" where id=' + req.body.id, function(err, result) {
         if (err) {
             console.log('[query] - :' + err);
             return;

@@ -45,21 +45,19 @@ export default @observer class noteEdit extends React.Component {
         }
     }
     saveNote(id) {
+        //如果success，跳转到首页，反之提示网络错误
         this.setState({
             isLoading: true
         });
-        //如果success，跳转到首页，反之提示网络错误
+        var formdata = new FormData();
+        formdata.append('id', id)
+        formdata.append('user', AppState.user)
+        formdata.append('time', new Date().toString().slice(4, 21))
+        formdata.append('content', document.getElementById('note').value)
+        formdata.append('file', document.getElementById('formControlsFile').files[0])
         fetch('/editNote', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': "application/json;charset=utf-8",
-                },
-                body: JSON.stringify({
-                    id: id,
-                    user: AppState.user,
-                    content: document.getElementById('note').value,
-                    time: new Date().toString().slice(4, 21)
-                })
+                body: formdata
             })
             .then(blob => blob.json())
             .then(code => {
@@ -121,7 +119,8 @@ export default @observer class noteEdit extends React.Component {
         if (!thisNote[0]) {
             return (<Redirect to={{pathname: '/'}}/>)
         }
-        return (<Col sm={10} md={8} smOffset={1} mdOffset={2}><form className={style.form} >
+        const fileurl = '/public/' + thisNote[0].file
+        return (<Col sm={10} md={8} smOffset={1} mdOffset={2}><form className={style.form}  enctype="multipart/form-data">
    <FormGroup controlId="note">
       <FormControl  defaultValue={thisNote[0].content} componentClass="textarea" placeholder="Write something..." />
     </FormGroup>
@@ -131,6 +130,7 @@ export default @observer class noteEdit extends React.Component {
       label="Attachment"
       help="Example block-level help text here."
     />
+    <a target="_blank" href={fileurl}>{thisNote[0].file}</a>
           <Button bsSize="large" block bsStyle="primary" disabled={this.state.isLoading} onClick={this.saveNote.bind(this,this.props.match.params.id)}>Save</Button>
           <Button bsSize="large" block bsStyle="danger" disabled={this.state.isLoading} onClick={this.deleteNote.bind(this,this.props.match.params.id)}>Delete</Button>
           </form></Col>)

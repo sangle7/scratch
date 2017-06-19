@@ -42,30 +42,14 @@ export default class newNote extends React.Component {
         this.setState({
             isLoading: true
         });
-        var file = document.getElementById('formControlsFile').files[0];
-        var reader = new FileReader();
-        reader.onload = (e) => {
-            var rawData = reader.result;
-            this.handleUpload(file, rawData)
-        }
-        reader.readAsBinaryString(file);
-    }
-    handleUpload = (file, rawData) => {
-        //上传note，发送ajax传入数据库（用户名，文字内容，时间）
+        var formdata = new FormData();
+        formdata.append('user', AppState.user)
+        formdata.append('time', new Date().toString().slice(4, 21))
+        formdata.append('content', document.getElementById('note').value)
+        formdata.append('file', document.getElementById('formControlsFile').files[0])
         fetch('/newNote', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': "application/json;charset=utf-8",
-                },
-                body: JSON.stringify({
-                    user: AppState.user,
-                    content: document.getElementById('note').value,
-                    time: new Date().toString().slice(4, 21),
-                    file: {
-                        name: file.name,
-                        data: rawData
-                    }
-                })
+                body: formdata
             })
             .then(blob => blob.json())
             .then(code => {
@@ -94,9 +78,9 @@ export default class newNote extends React.Component {
         }
     }
     render() {
-        return (<Col sm={10} md={8} smOffset={1} mdOffset={2}><form className={style.form}>
+        return (<Col sm={10} md={8} smOffset={1} mdOffset={2}><form className={style.form} enctype="multipart/form-data">
    <FormGroup controlId="note">
-      <FormControl onChange={this.handleChange} componentClass="textarea" placeholder="Write something..." />
+      <FormControl  onChange={this.handleChange} componentClass="textarea" placeholder="Write something..." />
     </FormGroup>
     <FieldGroup
       id="formControlsFile"
