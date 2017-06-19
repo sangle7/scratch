@@ -1,24 +1,19 @@
 const webpack = require('webpack')
 const path = require('path');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 
 module.exports = {
     name: "browser",
-    entry: "./client/src/js/main.jsx",
+    entry: {
+        vendor: ['react', 'react-dom', 'react-router-dom', 'mobx', 'mobx-react', 'react-bootstrap'],
+        main: "./client/src/js/main.jsx"
+    },
     output: {
         path: path.join(__dirname, "/client/build"),
         filename: '[name].js',
         chunkFilename: '[name]-[id].js',
         publicPath: "/build/",
-    },
-    devServer: {
-        historyApiFallback: {
-            rewrites: [{
-                from: /^\/$/,
-                to: '/index.html'
-            }, ]
-        },
-        contentBase: 'client'
     },
     devtool: false,
     module: {
@@ -28,16 +23,41 @@ module.exports = {
             include: path.join(__dirname, 'client')
         }, {
             test: /\.css$/,
-            loader: 'style-loader!css-loader',
+            use: ExtractTextPlugin.extract({
+                fallback: "style-loader",
+                use: "css-loader"
+            }),
             include: path.join(__dirname, 'client')
         }, {
             test: /\.scss$/,
-            loader: 'style-loader!css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!sass-loader',
+            use: ExtractTextPlugin.extract({
+                fallback: "style-loader",
+                use: ["css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]", "sass-loader"]
+            }),
             include: path.join(__dirname, 'client')
         }, {
             test: /\.(png|jpg)$/,
             loader: 'url-loader?limit=25000',
             include: path.join(__dirname, 'client')
         }]
-    }
+    },
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+            output: {
+                comments: false, // remove all comments
+            },
+            compress: {
+                warnings: false
+            }
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            names: ['vendor', 'manifest'], // 指定公共 bundle 的名字。
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+        new ExtractTextPlugin("styles.css"),
+    ]
 }
