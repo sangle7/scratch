@@ -13,6 +13,9 @@ import {
     Button,
     Col
 } from "react-bootstrap"
+import {
+    Redirect
+} from 'react-router-dom'
 import style from './../css/form.scss'
 
 
@@ -75,19 +78,6 @@ export default @observer class LoginPage extends React.Component {
             })
     }
     render() {
-        const {
-            from
-        } = this.props.location.state || {
-            from: {
-                pathname: '/'
-            }
-        }
-
-        if (AppState.login == false) {
-            return (
-                <Redirect to={from}/>
-            )
-        }
         return (<Col sm={6} md={4} smOffset={3} mdOffset={4}><form className={style.form}>
              <FieldGroup
       id="User"

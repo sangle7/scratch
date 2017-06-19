@@ -13,13 +13,15 @@ import ErrorPage from "./ErrorPage";
 import newNote from "./newNote";
 import noteEdit from "./noteEdit";
 import './../css/global.css'
-import Appstate from './Appstate'
+import {
+    AppState
+} from "./Appstate.js"
 
 
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
-    Appstate.login ? (
+    AppState.login ? (
       <Component {...props}/>
     ) : (
       <Redirect to={{
