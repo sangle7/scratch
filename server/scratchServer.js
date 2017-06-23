@@ -132,7 +132,11 @@ app.get('/mynote', function(req, res) {
 });
 
 app.post('/newNote', upload.single('file'), function(req, res) {
-    var _file = req.file.filename
+    if (req.file) {
+        var _file = req.file.filename
+    } else {
+        var _file = ''
+    }
     connection.query('INSERT INTO notes(name,content,time,file) VALUES("' + req.body.user + '","' + req.body.content + '","' + req.body.time + '","' + _file + '")', function(err, result) {
         if (err) {
             console.log('[query] - :' + err);
@@ -143,7 +147,11 @@ app.post('/newNote', upload.single('file'), function(req, res) {
 });
 
 app.post('/editNote', upload.single('file'), function(req, res) {
-    var _file = req.file.filename
+    if (req.file) {
+        var _file = req.file.filename
+    } else {
+        var _file = ''
+    }
     console.log(_file)
     connection.query('update notes set content="' + req.body.content + '",file="' + _file + '",time="' + req.body.time + '" where id=' + req.body.id, function(err, result) {
         if (err) {
