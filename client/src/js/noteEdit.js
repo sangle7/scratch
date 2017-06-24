@@ -59,7 +59,13 @@ export default @observer class noteEdit extends React.Component {
                 method: 'POST',
                 body: formdata
             })
-            .then(blob => blob.json())
+            .then(blob => {
+                if (blob.ok) {
+                    blob.json()
+                } else {
+                    alert('文件传输失败')
+                }
+            })
             .then(code => {
                 if (code.status == 'success') {
                     this.setState({
@@ -73,6 +79,9 @@ export default @observer class noteEdit extends React.Component {
                     alert(code.status)
                     alert('网络错误')
                 }
+            })
+            .catch(() => {
+                alert('文件传输失败')
             })
     }
     deleteNote(id) {
