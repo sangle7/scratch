@@ -35,17 +35,19 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 class Main extends React.Component {
 
     render() {
-        return (<Router><div>
-	<Head />
-<Switch>
-	<Route exact path='/' component={mainpage}/>
-	<Route exact path="/login" component={loginPage}/>
-	<Route exact path="/signup" component={signupPage}/>
-	<PrivateRoute exact path="/notes/new" component={newNote}/>
-	<PrivateRoute path="/notes/:id" component={noteEdit}/>
-	<Route  component={ErrorPage}/>
-</Switch></div>
-</Router>)
+        return (<Router>
+            <div>
+              <Head />
+              <Switch>
+                <Route exact path='/' component={mainpage}/>
+                <Route exact path="/login" component={loginPage}/>
+                <Route exact path="/signup" component={signupPage}/>
+                <PrivateRoute exact path="/notes/new" component={newNote}/>
+                <PrivateRoute path="/notes/:id" component={noteEdit}/>
+                <Route  component={ErrorPage}/>
+              </Switch>
+            </div>
+          </Router>)
     }
 }
 
